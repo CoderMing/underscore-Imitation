@@ -62,8 +62,30 @@
   // 当前版本号
   _.VERSION = '1.8.3-DM'
 
+  // underscore的内部方法
+  let optimizeCb = function(func, context, argCount) {
+    if (context === void 0)
+      return func
 
-
+    switch(argCount == null ? 3 : argCount) {
+      case 1:
+        return value => func.call(context, value)
+      case 2:
+        return (val1, val2) => {
+          return func.call(context, val1, val2)
+        }
+      // 一般的遍历器都是使用3个参数的
+      case 3:
+        return (value, index, collection) => {
+          return func.call(context, value, index, collection)
+        }
+      // reduce，reduceRight
+      case 4:
+        return (accumulator, value, index, collection) => {
+          return func.call(context, accumulator, value, index, collection)
+        }
+    }
+  }
 
 
 
