@@ -67,7 +67,7 @@
     if (context === void 0)
       return func
 
-    switch(argCount == null ? 3 : argCount) {
+    switch (argCount == null ? 3 : argCount) {
       case 1:
         return value => func.call(context, value)
       case 2:
@@ -85,8 +85,12 @@
           return func.call(context, accumulator, value, index, collection)
         }
     }
-  }
 
+    // 知识点：call会比apply快上很多，所以做这些判断是值得的
+    return function(...args) {
+      return func.apply(context, args)
+    }
+  }
 
 
 
