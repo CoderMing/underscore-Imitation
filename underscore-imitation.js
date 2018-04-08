@@ -113,12 +113,76 @@
     // 其实经过上述判断，只会有true, 数字，字符串到这一步
     // 这些东西都是可以直接toString使用了
     // 此处返回一个对象的相关键值
-    // 也就是官方文档中_.iteratee的介绍：
-    // var stooges = [{name: 'curly', age: 25}, {name: 'moe', age: 21}, {name: 'larry', age: 23}];
-    // _.map(stooges, _.iteratee('age'));
-    // => [25, 21, 23];
     return _.property(value)
   }
+
+  // 扩展的遍历器函数
+  // 相当于curry化了下cb函数
+  // 这样做的主要原因是针对各种情况，无法获知当value为函数的时候穿的参数的情况
+  // 所以第三个参数为Infinity，这样在optimizeCb中就直接apply了
+  // 官方文档中_.iteratee的介绍：
+  // var stooges = [{name: 'curly', age: 25}, {name: 'moe', age: 21}, {name: 'larry', age: 23}];
+  // _.map(stooges, _.iteratee('age'));
+  // => [25, 21, 23];
+  _.iteratee = (value, context) => {
+    return cb(value, context, Infinity)
+  }
+
+  // todo
+  let createAssigner = (...args) => {
+
+  }
+
+  // todo
+  let baseCreate = prototype => {
+
+  }
+
+  // 经典的闭包函数
+  // 返回一个需要一个参数的函数，返回生成的那个函数的属性值
+  let property = key => {
+    return obj => obj == null ? void 0 : obj[key]
+  }
+
+  // Math.pow(2, 53) - 1为js中能精确表示最大的数字
+  // 防止数组超出容量
+  let MAX_ARRAY_INDEX = Math.pow(2, 53) - 1
+
+  // 闭包函数的应用
+  // Que：此处和直接用属性值，有什么区别吗？
+  let getLength = property('length')
+
+  // 判断是否是类数组对象
+  var isArrayLike = collection => {
+    let length = getLength(collection)
+    // 下面做的这个判断，是因为在类数组中
+    // length不会小于0， 也不会大于MAX_ARRAY_INDEX
+    // 测试了下，如果是数组，会直接报错
+    // 类数组暂时还没有试过
+    return   typeof length === 'number'
+          && length >= 0
+          && length <= MAX_ARRAY_INDEX
+  }
+
+
+
+  // Collection Functions
+  // 数组或者对象的扩展方法
+  // 共 25 个扩展方法
+  // --------------------
+
+
+  _.each = _.forEach = function(obj, iteratee, context) {
+     
+  }
+
+
+
+
+
+
+
+
 
 
 
