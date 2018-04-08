@@ -92,6 +92,56 @@
     }
   }
 
+  // underscore对回调函数的拓展
+  // 我们知道，一般的迭代方法只能是传一个迭代函数
+  // 此处对迭代函数进行了二次封装
+  // 实现了传各类参数的情况下，都能做一些事情
+  let cb = (value, context, argCount) => {
+    // 如果什么都没有传，就返回原对象，相当于什么都没做
+    // _.each([1, 2, 3]) 
+    // => [1 ,2, 3]
+    if (value == null) 
+      return _.identity
+    // 如果传的是function，就正常地返回迭代函数就好
+    if (_.isFunction(value))
+      return optimizeCb(value, context, argCount)
+    // 如果传的是object，就会调用判断方法
+    // _.map([{a: 2}, {a: 1}], {a: 1})
+    // => [false, true]
+    if (_.isObject(value))
+      return _.matcher(value)
+    // 其实经过上述判断，只会有true, 数字，字符串到这一步
+    // 这些东西都是可以直接toString使用了
+    // 此处返回一个对象的相关键值
+    // 也就是官方文档中_.iteratee的介绍：
+    // var stooges = [{name: 'curly', age: 25}, {name: 'moe', age: 21}, {name: 'larry', age: 23}];
+    // _.map(stooges, _.iteratee('age'));
+    // => [25, 21, 23];
+    return _.property(value)
+  }
+
+
+
+
+
+
+
+
+
+
+  // 返回传入的参数
+  // 在各种迭代函数中起到了简化的作用
+  _.identity = value => value
+
+
+
+
+
+
+
+
+
+
 
 
 
