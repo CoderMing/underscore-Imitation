@@ -173,7 +173,25 @@
 
 
   _.each = _.forEach = function(obj, iteratee, context) {
-     
+    // 相当于绑定this
+    iteratee = optimizeCb(iteratee, context)
+
+    let i, length
+    // 如果是类数组函数，就遍历下各个值
+    // Que：如果是松散数列，Array.prototype.forEach是不会遍历的
+    // 但是此方法却会遍历到
+    // 有什么方法可以杜绝被遍历到吗？
+    if (isArrayLike(obj))
+      for (i = 0, length = getLength(obj); i < length; i++)
+        iteratee(obj[i], i, obj)
+
+    else {
+      // 调用内部方法获取到所有可以遍历的值
+      let keys = _.keys(obj)
+
+      for (i = 0, length = getLength(keys); i < length; i++)
+        iteratee(obj[keys[i]], keys[i], obj)
+    }
   }
 
 
@@ -185,8 +203,10 @@
 
 
 
+  // todo
+  _.keys = function() {
 
-
+  }
 
 
 
