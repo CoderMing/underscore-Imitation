@@ -205,7 +205,13 @@
 
   // todo
   _.keys = function() {
+    if (!_.isObject(obj)) return []
+    // 如果有原生，就用原生的
+    if (nativeKeys) return nativeKeys(obj)
+    
+    let keys = []
 
+    for (var key in )
   }
 
 
