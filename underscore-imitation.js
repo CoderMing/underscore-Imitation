@@ -192,8 +192,9 @@
       for (i = 0, length = getLength(keys); i < length; i++)
         iteratee(obj[keys[i]], keys[i], obj)
     }
-  }
 
+    return obj
+  }
 
 
 
@@ -211,7 +212,13 @@
     
     let keys = []
 
-    for (var key in )
+    for (let key in obj)
+      if (_.has(obj, key)) keys.push(key)
+
+    // IE9的bug
+    if (hasEnumBug) collectNonEnumProps(obj, keys)
+    
+    return keys
   }
 
 
@@ -225,6 +232,10 @@
 
 
 
+
+  _.has = function(obj, key) {
+    return obj != null && hasOwnPeoperty.call(obj, key)
+  }
 
 
 
