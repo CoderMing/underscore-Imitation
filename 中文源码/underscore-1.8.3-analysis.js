@@ -316,7 +316,7 @@
     var keys = !isArrayLike(obj) && _.keys(obj),
         // 如果 obj 为对象，则 length 为 key.length
         // 如果 obj 为数组，则 length 为 obj.length
-        length = (keys || obj).length,
+        length = getLength(keys || obj),
         results = Array(length); // 结果数组
 
     // 遍历

@@ -196,6 +196,15 @@
     return obj
   }
 
+  _.map = _.collect = function(obj, iteratee, context) {
+    // 诸多数组方法都用这个功能
+    iteratee = cb(iteratee, context)
+
+    let keys = !isArrayLike(obj) && _.keys(obj)
+        legth = (keys || obj).length,
+        results = Array.length
+  }
+
 
 
 
@@ -220,6 +229,8 @@
     
     return keys
   }
+
+
 
 
 
