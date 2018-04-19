@@ -218,6 +218,52 @@
     return results
   }
 
+  // reduce类的函数
+  // 因为reduce和reduceRight只有一个遍历方向的区别
+  // 所以可以采用一个函数，来同时实现两个功能
+  // 此处传的参数dir 就是一个控制功能
+  // dir === 1 -> _.reduce
+  // dir === -1 -> _.reduceRight
+  function createReduce(dir) {
+    // 遍历函数
+    // 观察一下他的几个参数，你是否发现和reduce该有的遍历函数（即reduce调用时的第二个参数）
+    // 的区别，只不过是多传了index和length
+    // 正是这两个东西，配合dir，可以实现同时做reduce和reduceRight的事
+    function iterator(obj, iteratee, memo, keys, index, length) {
+      for (; index >= 0 && index < length; index += dir) {
+        // 和上面的_.map中的作用一样，实现兼容
+        let currentKey = keys ? keys[index] : index
+
+        memo = iteratee(memo, obj[currentKey], currentKey, obj)
+      }
+      // 返回结果
+      return memo
+    }
+    // 这个时候就返回制作好的reduce函数了
+    return function(obj, iteratee, memo, context) {
+      iteratee = optimizeCb(iteratee, context, 4)
+      // 此处和上面的map什么的很类似了
+      // 唯一的区别就是index，此处通过dir分成了两种情况
+      // 正好对应reduce和reduceRight
+      let keys = !isArrayLike(obj) && _.keys(obj)
+          legth = (keys || obj).length,
+          index = dir > 0 ? 0 : length - 1
+      // 如果没有给定初始值（即没有第三个参数），就不遍历第一个元素
+      // 并把第一个元素抽成第二个的memo
+      if (arguments.length < 3) {
+        memo = obj[keys ? keys[index] : index]
+        index += dir
+      }
+
+      return memo
+    }
+  }
+  // 这个时候再定义reduce和reduceRight函数
+  // 就水到渠成了
+  _.reduce = _.foldl = _.inject = createReduce(1)
+
+  _.reduce = _.flodr = createReduce(-1)
+
 
 
 
