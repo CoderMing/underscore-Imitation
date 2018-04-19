@@ -199,10 +199,23 @@
   _.map = _.collect = function(obj, iteratee, context) {
     // 诸多数组方法都用这个功能
     iteratee = cb(iteratee, context)
-
+    // 先获取到需要遍历的东西
+    // 巧妙的过滤非法参数的方法：
+    // 如果传进来的不是arrayLike和可遍历（Object）的东西，就让keys的值为false
+    // 然后后面获取length属性的时候，就为0了
     let keys = !isArrayLike(obj) && _.keys(obj)
         legth = (keys || obj).length,
         results = Array.length
+
+    for (let index = 0; index < length; index++) {
+      // 有keys的话说明传进来的是arrayLike，这时直接传index就好
+      // 没keys而且能进行到这一步的话，说明是Object，这时就访问keys的内容
+      // 从而实现兼容
+      let currentKey = keys ? keys[index] : index
+      results[index] = iteratee(obj[currentKey], currentKey, obj)
+    }
+    //返回新结果
+    return results
   }
 
 
