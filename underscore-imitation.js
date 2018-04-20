@@ -278,6 +278,32 @@
           : void 0
   }
 
+  // filter方法
+  // 筛选数组中的一些数
+  _.filter = _.select = function(obj, predicate, context) {
+    let results = []
+    // 创建通用的遍历函数
+    // 实现输入各种类别的数值都能正确判断
+    predicate = cb(predicate, context)
+    // 遍历函数，将判断成功的函数push进去
+    _.each(obj, function(value, index, list) {
+      if (predicate(value, index, list)) results.push(value)
+    })
+    // 返回结果
+    return results
+  }
+
+  // 返回数组中所有不满足条件的数值
+  // 相当于时filter的补集
+  // Que: 这里为什么没有像reduce reduceRight一样，先使用一个函数
+  // 然后再将两个方法进行包装？
+  _.reject = function(obj, predicate, context) {
+    return _.filter(obj, _.negate(cb(context)), context)
+  }
+
+  
+
+
 
 
 
