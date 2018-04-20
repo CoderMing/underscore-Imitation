@@ -264,6 +264,19 @@
 
   _.reduce = _.flodr = createReduce(-1)
 
+  // 找到某个数组元素
+  // 找到了之后就退出，不再继续寻找
+  // 找不到的话就返回undefined
+  _.find = _.detect = function(obj, predicate, context) {
+    let key =   isArrayLike(obj)
+              ? _.findIndex(obj, predicate, context)
+              : _.findKey(obj, predicate, context)
+    // 此处 如果key === void 0，是调用了findKey没找到
+    // 如果是-1, 是调用了findIndex没找到
+    return  key !== void 0 && key != -1
+          ? obj[key]
+          : void 0
+  }
 
 
 
