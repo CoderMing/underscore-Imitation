@@ -301,7 +301,30 @@
     return _.filter(obj, _.negate(cb(context)), context)
   }
 
-  
+  // tips： 大多数组方法都差不多一个套路
+  // 首先判断输入的是不是类数组，或者是对象
+  // 然后进行遍历处理（处理过程中分清楚了数组和对象）
+
+  // 和Array.prototype.every一样
+  // 如果一个数组/对象里面的所有元素都满足某个条件
+  // 就返回true
+  // 否则返回false
+  _.every = function(obj, predicate, context) {
+    // 更换正确地this
+    predicate = cb(predicate, context)
+    
+    let keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length
+    
+    for (let index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index
+      // 如果有一个点没有满足条件，就返回false
+      if (!predicate(obj[currentKey], currentKey, obj))
+        return false
+    }
+
+    return true
+  }
 
 
 
