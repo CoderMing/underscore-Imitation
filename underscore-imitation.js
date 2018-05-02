@@ -309,7 +309,7 @@
   // 如果一个数组/对象里面的所有元素都满足某个条件
   // 就返回true
   // 否则返回false
-  _.every = function(obj, predicate, context) {
+  _.every = _.all = function(obj, predicate, context) {
     // 更换正确地this
     predicate = cb(predicate, context)
     
@@ -326,7 +326,34 @@
     return true
   }
 
+  // Que: 为什么这个地方没有使用像reduce那样的反函数方法？
+  // 为什么这个地方没有用下面这个写法？
+  // _.some = _.any = function(obj, predicate, context) {
+  //   let prevPre = predicate,
+  //       predicate = function() {
+  //         return !predicate.apply(this, arguments)
+  //       }
+  //   if (_.every(obj, predicate, context)) {
+  //     return false
+  //   }
+  //   return true
+  // }
 
+  _.some = _.any = function(obj, predicate, context) {
+    predicate = cb(predicate, context)
+
+    let keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length
+    
+    for (let index = 0; index < length; index++) {
+      let currentKey = keys ? keys[index] : index
+
+      if (predicate(obj[currentKey], currentKey, obj))
+        return true
+    }
+    
+    return true
+  }
 
 
 
