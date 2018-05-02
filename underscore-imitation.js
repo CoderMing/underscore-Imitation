@@ -355,6 +355,24 @@
     return true
   }
 
+// 查找是否具有某个元素
+// 在愚人码头的中文文档中没有给出第三第四个参数的作用
+// 经过测试，第三第四个参数在1.8.3版本下是存在的
+// 作用是从下标为第三个参数的元素开始，一直查找到下标为第四个参数之前的元素（不包括第四个参数）
+_.contaions = _.includes = _.include = function (obj, item, formIndex, guard) {
+  // 获取要遍历的元素
+  if (!isArrayLike(obj)) obj = _.values(obj)
+
+  // 定位查询的起始位置
+  if (typeof formIndex != 'number' || guard) formIndex = 0
+
+  // 定好位置之后，就可以使用_.indexOf来返回值了
+  // indexOf方法查到了值就会返回对应的属性名
+  // 没查到就返回-1
+  // 所以这个地方只需要简简单单地添加一个 >= 0 的判断
+
+  return _.indexOf(obj, item, formIndex) >= 0
+}
 
 
 
