@@ -374,6 +374,27 @@ _.contaions = _.includes = _.include = function (obj, item, formIndex, guard) {
   return _.indexOf(obj, item, formIndex) >= 0
 }
 
+// 数组的遍历函数
+// 对数组的每一个对象都使用某个方法
+// 如果第二个参数是方法的话，就调用第二个参数
+// 如果第二个参数不是数组的话，查找obj（第一个参数）有没有属性名为第二个参数的函数（可以查找原型链）
+// 如果有，就会调用该函数，如果没有，就会报错。
+// 第三个和之后的参数，将会被传到调用的函数中
+// 调用的函数中，this指向是对于当前的元素
+_.invoke = function(obj, method) {
+  // 抽取出要传到函数里的arguments
+  let args = slice.call(arguments, 2)
+
+  let isFunc = _.isFunction(method)
+
+  return _.map(obj, function(value) {
+      // Que： 为什么这个地方会在函数内部进行判断？
+      // 如果我在遍历函数之前，就进行判断，岂不是更方便一些？
+      let func = isFunc ? method : value(method)
+      return func == null ? func : func.apply(value, args)
+    })
+  }
+
 
 
 
