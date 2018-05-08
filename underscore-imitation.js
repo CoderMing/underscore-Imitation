@@ -355,48 +355,61 @@
     return true
   }
 
-// 查找是否具有某个元素
-// 在愚人码头的中文文档中没有给出第三第四个参数的作用
-// 经过测试，第三第四个参数在1.8.3版本下是存在的
-// 作用是从下标为第三个参数的元素开始，一直查找到下标为第四个参数之前的元素（不包括第四个参数）
-_.contaions = _.includes = _.include = function (obj, item, formIndex, guard) {
-  // 获取要遍历的元素
-  if (!isArrayLike(obj)) obj = _.values(obj)
+  // 查找是否具有某个元素
+  // 在愚人码头的中文文档中没有给出第三第四个参数的作用
+  // 经过测试，第三第四个参数在1.8.3版本下是存在的
+  // 作用是从下标为第三个参数的元素开始，一直查找到下标为第四个参数之前的元素（不包括第四个参数）
+  _.contaions = _.includes = _.include = function (obj, item, formIndex, guard) {
+    // 获取要遍历的元素
+    if (!isArrayLike(obj)) obj = _.values(obj)
 
-  // 定位查询的起始位置
-  if (typeof formIndex != 'number' || guard) formIndex = 0
+    // 定位查询的起始位置
+    if (typeof formIndex != 'number' || guard) formIndex = 0
 
-  // 定好位置之后，就可以使用_.indexOf来返回值了
-  // indexOf方法查到了值就会返回对应的属性名
-  // 没查到就返回-1
-  // 所以这个地方只需要简简单单地添加一个 >= 0 的判断
+    // 定好位置之后，就可以使用_.indexOf来返回值了
+    // indexOf方法查到了值就会返回对应的属性名
+    // 没查到就返回-1
+    // 所以这个地方只需要简简单单地添加一个 >= 0 的判断
 
-  return _.indexOf(obj, item, formIndex) >= 0
-}
-
-// 数组的遍历函数
-// 对数组的每一个对象都使用某个方法
-// 如果第二个参数是方法的话，就调用第二个参数
-// 如果第二个参数不是数组的话，查找obj（第一个参数）有没有属性名为第二个参数的函数（可以查找原型链）
-// 如果有，就会调用该函数，如果没有，就会报错。
-// 第三个和之后的参数，将会被传到调用的函数中
-// 调用的函数中，this指向是对于当前的元素
-_.invoke = function(obj, method) {
-  // 抽取出要传到函数里的arguments
-  let args = slice.call(arguments, 2)
-
-  let isFunc = _.isFunction(method)
-
-  return _.map(obj, function(value) {
-      // Que： 为什么这个地方会在函数内部进行判断？
-      // 如果我在遍历函数之前，就进行判断，岂不是更方便一些？
-      let func = isFunc ? method : value(method)
-      return func == null ? func : func.apply(value, args)
-    })
+    return _.indexOf(obj, item, formIndex) >= 0
   }
 
+  // 数组的遍历函数
+  // 对数组的每一个对象都使用某个方法
+  // 如果第二个参数是方法的话，就调用第二个参数
+  // 如果第二个参数不是数组的话，查找obj（第一个参数）有没有属性名为第二个参数的函数（可以查找原型链）
+  // 如果有，就会调用该函数，如果没有，就会报错。
+  // 第三个和之后的参数，将会被传到调用的函数中
+  // 调用的函数中，this指向是对于当前的元素
+  _.invoke = function(obj, method) {
+    // 抽取出要传到函数里的arguments
+    let args = slice.call(arguments, 2)
 
+    let isFunc = _.isFunction(method)
 
+    return _.map(obj, function(value) {
+        // Que： 为什么这个地方会在函数内部进行判断？
+        // 如果我在遍历函数之前，就进行判断，岂不是更方便一些？
+        let func = isFunc ? method : value(method)
+        return func == null ? func : func.apply(value, args)
+      })
+  }
+
+  // 传入一个 对象/数组 所组成的数组
+  // 返回一个数组，内容是传入数组每个元素对应键值的值
+  // 如果没有那个键值，就返回undefined
+  // 这个也说明了，传入数组和传出数组的length应该是一样的
+  _.pluck = function(obj, key) {
+    return _.map(obj, _.property(key))
+  }
+
+  // 筛选有指定键值对的对象
+  // 传入一个数组，传出满足条件的元素的数组
+  // 这儿的 _.mather 函数，返回值是一个函数
+  // 相当于进行了 _.isMatch 的柯里话
+  _.where = function(obj, attrs) {
+    return _.filter(obj, _.mather(attrs))
+  }
 
 
 
