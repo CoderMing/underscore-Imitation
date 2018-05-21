@@ -417,6 +417,33 @@
     return _.filter(obj, _.matcher(attrs));
   };
 
+  // 寻找第一个有指定 key-value 的对象
+  _.findWhere = function(obj, attrs) {
+    return _.find(obj, _.matcher(attrs))
+  }
+
+  // _.max = function(obj, iteratee, context) {
+  //   var result = -Infinity,
+  //       lastComputed = -Infinity,
+  //       value,
+  //       computed
+
+  //   if (iteratee = null && obj != null) {
+
+  //   }
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
   // todo
   _.keys = function() {
     if (!_.isObject(obj)) return []
@@ -434,7 +461,12 @@
     return keys
   }
 
+  // // 和_.keys的作用差不多
+  // // 差距是提供了原型链上的key-value值
+  // _.allKeys = function(obj) {
+  //   if (!_isObject(obj)) return []
 
+  // }
 
 
 
