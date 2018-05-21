@@ -406,12 +406,16 @@
   // 筛选有指定键值对的对象
   // 传入一个数组，传出满足条件的元素的数组
   // 这儿的 _.mather 函数，返回值是一个函数
-  // 相当于进行了 _.isMatch 的柯里话
+  // 相当于进行了 _.isMatch 的柯里化
   _.where = function(obj, attrs) {
     return _.filter(obj, _.mather(attrs))
   }
 
-
+  // 根据指定的键值对
+  // 选择对象
+  _.where = function(obj, attrs) {
+    return _.filter(obj, _.matcher(attrs));
+  };
 
   // todo
   _.keys = function() {
